@@ -1,4 +1,5 @@
 #include <iostream>
+#include<fstream>
 using namespace std;
 
 #include <chrono>
@@ -7,10 +8,7 @@ using std::chrono::duration_cast;
 using std::chrono::milliseconds;
 
 #include <thread>
-#include <mutex>
 #include <vector>
-
-#include<math.h>
 
 const int THREAD_COUNT = 8;
 
@@ -20,10 +18,9 @@ bool is_prime[NUM_COUNT+1];
 
 // simple prime checker (not used for sieve)
 bool check_prime(int num) {
-    if (num == 0 || num == 1)
-        return false;
+    if (num == 0 || num == 1) return false;
 
-    for (int i = 2; i*i < num; i++) {
+    for (int i = 2; i*i <= num; i++) {
         if (num % i == 0)
             return false;
     }
@@ -31,21 +28,10 @@ bool check_prime(int num) {
     return true;
 }
 
-void sieve() {
-    for (long i = 0; i <= sqrt(NUM_COUNT); i++) {
-        if (!is_prime[i]) {
-            continue;
-        }
-    
-        for (long j = i*i; j <= NUM_COUNT; j += i) {
-            is_prime[j] = false;
-        }
-    }
-}
-
+// sets a range of prime values
 void calc_prime_range(int low, int high) {
     for (int num = low; num <= high; num++) {
-        is_prime[num] == check_prime(num);
+        is_prime[num] = check_prime(num);
     }
 }
 
@@ -65,32 +51,35 @@ void print_result(int runtime_ms) {
         }
     }
 
-    cout << "sum: " << sum << " -  count: " << prime_count << "\n";
+    ofstream output_file;
+    output_file.open("primes.txt");
+
+    output_file << runtime_ms << "ms ";
+    output_file << sum << " " << prime_count << "\n";
 
     for (int &top : top_ten)
-        cout << top << " ";
-
-    cout << "\n";
-
-    cout << runtime_ms << " ms\n";
+        output_file << top << " ";
 }
 
 int main() {
     auto start_time = high_resolution_clock::now();
 
-    for (int i = 0; i <= NUM_COUNT; i++) {
-        is_prime[i] = true; // assume (initially) that all numbers are prime
-    }
+    vector<thread> threads;
+    int nums_per_thread = NUM_COUNT / THREAD_COUNT;
 
-    is_prime[0] = false;
-    is_prime[1] = false;
+    // spawn all threads
+    for (int t = 0; t < THREAD_COUNT; t++)
+        threads.push_back(thread(calc_prime_range, nums_per_thread * t, nums_per_thread * (t+1)));
 
-    sieve();
-
+    // join all threads after execution
+    for (thread &t : threads)
+        t.join();
+    
+    // calculate execution time
     auto end_time = high_resolution_clock::now();
-    int duration = duration_cast<milliseconds>(end_time - start_time).count();
-
-    print_result(duration);
+    int runtime_ms = duration_cast<milliseconds>(end_time - start_time).count();
+    
+    print_result(runtime_ms);
 
     return 0;
 }

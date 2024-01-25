@@ -14,6 +14,7 @@
         "format": "cpp",
         "initializer_list": "cpp",
         "span": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "fstream": "cpp"
     }
 }
