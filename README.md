@@ -27,7 +27,8 @@ The format of this output is organized as follows:
 Note that execution time is shown in `ms` or milliseconds.
 
 ### Design Breakdown
-Note that all code exists in a single `main.cpp` file.
+*Note that all code exists in the `main.cpp` file.*
+
 The design of the code is quite simple, there is a large array that represents the list of all numbers and whether they are prime.
 
 The code first spawns 8 threads that are each given 1/8th of the total numbers to calculate. This allows the threads to each receive just about an equal number of calculations.
@@ -38,6 +39,6 @@ Each thread iterates through its set of numbers and determines whether a number 
 Once all threads have completed, all prime numbers from $1$ to $10^8$ have been found and the final results are printed in the output format described above.
 
 ### Evaluation
-As a result of the algorithm chosen, this code is able to produce an output in just over 10 seconds when using all 8 threads. Thanks to an even set of calculations among all threads, this program is able to efficiently calculate many prime numbers relatively quickly.
+As a result of the algorithm chosen, this code is able to produce an output in just over 10 seconds when using all 8 threads on a testing desktop PC. Thanks to an even set of calculations among all threads, this program is able to efficiently calculate many prime numbers relatively quickly.
 
-Beyond that, the code is designed in an expandable way, since all numbers are listed in a large array, it would be trivial to improve the program in the future to support better prime calculation algorithms. The number of threads used and the range of primes to calculate are set as `const` values at the top of the program to allow for easy modification as needed.
+Beyond this, the code is designed in an expandable way. Since all numbers are listed in a large array, it would be trivial to improve the program in the future to support better prime calculation algorithms. The number of threads used and the range of primes to calculate are set as `const` values at the top of the program to allow for easy modification as needed.
