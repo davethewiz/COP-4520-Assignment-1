@@ -1,5 +1,5 @@
 #include <iostream>
-#include<fstream>
+#include <fstream>
 using namespace std;
 
 #include <chrono>
@@ -11,12 +11,11 @@ using std::chrono::milliseconds;
 #include <vector>
 
 const int THREAD_COUNT = 8;
-
 const int NUM_COUNT = 1e8;
+
 bool is_prime[NUM_COUNT+1];
 
-
-// simple prime checker (not used for sieve)
+// Given an integer, returns whether it is a prime number
 bool check_prime(int num) {
     if (num == 0 || num == 1) return false;
 
@@ -28,7 +27,7 @@ bool check_prime(int num) {
     return true;
 }
 
-// sets a range of prime values
+// Calculates a range of prime values for the is_prime array
 void calc_prime_range(int low, int high) {
     for (int num = low; num <= high; num++) {
         is_prime[num] = check_prime(num);
@@ -41,6 +40,7 @@ void print_result(int runtime_ms) {
 
     vector<int> top_ten;
 
+    // calculate prime sum, number of primes and top ten prime list
     for (int i = NUM_COUNT; i >= 0; i--) {
         if (is_prime[i]) {
             prime_count++;
@@ -51,6 +51,7 @@ void print_result(int runtime_ms) {
         }
     }
 
+    // final text file output
     ofstream output_file;
     output_file.open("primes.txt");
 
@@ -67,7 +68,7 @@ int main() {
     vector<thread> threads;
     int nums_per_thread = NUM_COUNT / THREAD_COUNT;
 
-    // spawn all threads
+    // spawn all threads to calculate a range of primes split evenly for each thread
     for (int t = 0; t < THREAD_COUNT; t++)
         threads.push_back(thread(calc_prime_range, nums_per_thread * t, nums_per_thread * (t+1)));
 
