@@ -6,7 +6,7 @@ It does this by implementing a multi-threaded / concurrent approach to a simple 
 
 ### Compiling and Running
 To run this program, clone this repository and open the terminal from within the main project directory.
-Once the terminal is open type in the following command to create an compile and create an executable called "calculate primes":
+Once the terminal is open type in the following command to create an compile and create an executable called "calculate primes.exe":
 ```
 g++ main.cpp -o "calculate primes"
 ```
@@ -25,6 +25,7 @@ The format of this output is organized as follows:
 ```
 
 Note that execution time is shown in `ms` or milliseconds.
+Also note that this repo already contains a `primes.txt` file which contains the expected output.
 
 ### Design Breakdown
 *Note that all code exists in the `main.cpp` file.*
